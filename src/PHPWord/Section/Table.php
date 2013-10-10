@@ -50,11 +50,11 @@ class PHPWord_Section_Table {
 	private $_rows = array();
 	
 	/**
-	 * Row heights
+	 * Row styles
 	 *
 	 * @var array
 	 */
-	private $_rowHeights = array();
+	private $_rowStyles = array();
 	
 	/**
 	 * Table holder
@@ -101,11 +101,32 @@ class PHPWord_Section_Table {
 	/**
 	* Add a row
 	*
-	* @param int $height
+	* @param int $height or style-array
 	*/
 	public function addRow($height = null) {
 		$this->_rows[] = array();
-		$this->_rowHeights[] = $height;
+		$this->_rowStyles[] = $this->toRowStyle($height);
+	}
+
+	private function toRowStyle($input = null) {
+		$style = array();
+		if (!is_array($input)) {
+			$style = array('height' => $input);
+		}
+		if (!array_key_exists('height', $style)) {
+			$style['height'] = null;
+		}
+		if ($input && array_key_exists('cantSplit', $input) && $input['cantSplit'] === true) {
+			$style['cantSplit'] = true;
+		} else {
+			$style['cantSplit'] = false;
+		}
+		if ($input && array_key_exists('header', $input) && $input['header'] === true) {
+			$style['header'] = true;
+		} else {
+			$style['header'] = false;
+		}
+		return $style;
 	}
 	
 	/**
@@ -136,8 +157,8 @@ class PHPWord_Section_Table {
 	 * 
 	 * @return array
 	 */
-	public function getRowHeights() {
-		return $this->_rowHeights;
+	public function getRowStyles() {
+		return $this->_rowStyles;
 	}
 	
 	/**

@@ -452,18 +452,30 @@ class PHPWord_Writer_Word2007_Base extends PHPWord_Writer_Word2007_WriterPart {
 					}
 				}
 
-				$_heights = $table->getRowHeights();
+				$_rowStyles = $table->getRowStyles();
 				for($i=0; $i<$_cRows; $i++) {
 					$row = $_rows[$i];
-					$height = $_heights[$i];
+					$height = $_rowStyles[$i]['height'];
+					$cantSplit = $_rowStyles[$i]['cantSplit'];
+					$isHeader = $_rowStyles[$i]['header'];
 
 					$objWriter->startElement('w:tr');
 
-						if(!is_null($height)) {
+						if(!is_null($height) || $isHeader || $cantSplit) {
 							$objWriter->startElement('w:trPr');
-								$objWriter->startElement('w:trHeight');
-									$objWriter->writeAttribute('w:val', $height);
-								$objWriter->endElement();
+								if (!is_null($height)) {
+									$objWriter->startElement('w:trHeight');
+										$objWriter->writeAttribute('w:val', $height);
+									$objWriter->endElement();
+								}
+								if ($cantSplit) {
+									$objWriter->startElement('w:cantSplit');
+									$objWriter->endElement();
+								}
+								if ($isHeader) {
+									$objWriter->startElement('w:tblHeader');
+									$objWriter->endElement();
+								}
 							$objWriter->endElement();
 						}
 
