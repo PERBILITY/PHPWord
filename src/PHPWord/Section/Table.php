@@ -132,7 +132,7 @@ class PHPWord_Section_Table {
 	/**
 	* Add a cell
 	*
-	* @param int $width
+	* @param int|string $width
 	* @param mixed $style
 	* @return PHPWord_Section_Table_Cell
 	*/

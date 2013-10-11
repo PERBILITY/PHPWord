@@ -32,12 +32,14 @@ class PHPWord_Style_Table {
 	private $_cellMarginLeft;
 	private $_cellMarginRight;
 	private $_cellMarginBottom;
+	private $_width;
 	
 	public function __construct() {
 		$this->_cellMarginTop = null;
 		$this->_cellMarginLeft = null;
 		$this->_cellMarginRight = null;
 		$this->_cellMarginBottom = null;
+		$this->_width = null;
 	}
 	
 	public function setStyleValue($key, $value) {
@@ -78,6 +80,14 @@ class PHPWord_Style_Table {
 	
 	public function getCellMargin() {
 		return array($this->_cellMarginTop, $this->_cellMarginLeft, $this->_cellMarginRight, $this->_cellMarginBottom);
+	}
+
+	public function setWidth($pValue = null) {
+		$this->_width = $pValue;
+	}
+	
+	public function getWidth() {
+		return $this->_width;
 	}
 }
 ?>

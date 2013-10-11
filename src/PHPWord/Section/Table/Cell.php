@@ -38,7 +38,7 @@ class PHPWord_Section_Table_Cell {
 	/**
 	 * Cell Width
 	 * 
-	 * @var int
+	 * @var int|string
 	 */
 	private $_width = null;
 	
@@ -76,7 +76,7 @@ class PHPWord_Section_Table_Cell {
 	 * 
 	 * @param string $insideOf
 	 * @param int $pCount
-	 * @param int $width
+	 * @param int|string $width
 	 * @param mixed $style
 	 */
 	public function __construct($insideOf, $pCount, $width = null, $style = null) {
@@ -303,7 +303,7 @@ class PHPWord_Section_Table_Cell {
 	/**
 	 * Get Cell width
 	 * 
-	 * @return int
+	 * @return int|string
 	 */
 	public function getWidth() {
 		return $this->_width;

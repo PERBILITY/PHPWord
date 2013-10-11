@@ -487,8 +487,16 @@ class PHPWord_Writer_Word2007_Base extends PHPWord_Writer_Word2007_WriterPart {
 
 								$objWriter->startElement('w:tcPr');
 									$objWriter->startElement('w:tcW');
-										$objWriter->writeAttribute('w:w', $width);
-										$objWriter->writeAttribute('w:type', 'dxa');
+										if($width === 'auto') {
+											$objWriter->writeAttribute('w:w', 0);
+											$objWriter->writeAttribute('w:type', 'auto');
+										} elseif(substr($width, -1) === '%') {
+											$objWriter->writeAttribute('w:w', $width);
+											$objWriter->writeAttribute('w:type', 'pct');
+										} else {
+											$objWriter->writeAttribute('w:w', $width);
+											$objWriter->writeAttribute('w:type', 'dxa');
+										}
 									$objWriter->endElement();
 
 									if($cellStyle instanceof PHPWord_Style_Cell) {
@@ -537,40 +545,60 @@ class PHPWord_Writer_Word2007_Base extends PHPWord_Writer_Word2007_WriterPart {
 		$mLeft = (!is_null($margins[1])) ? true : false;
 		$mRight = (!is_null($margins[2])) ? true : false;
 		$mBottom = (!is_null($margins[3])) ? true : false;
+		$tableWidth = $style->getWidth();
 
-		if($mTop || $mLeft || $mRight || $mBottom) {
+		if($mTop || $mLeft || $mRight || $mBottom || $tableWidth) {
 			$objWriter->startElement('w:tblPr');
-				$objWriter->startElement('w:tblCellMar');
 
-					if($mTop) {
-						$objWriter->startElement('w:top');
-							$objWriter->writeAttribute('w:w', $margins[0]);
+				if($mTop || $mLeft || $mRight || $mBottom) {
+					$objWriter->startElement('w:tblCellMar');
+
+						if($mTop) {
+							$objWriter->startElement('w:top');
+								$objWriter->writeAttribute('w:w', $margins[0]);
+								$objWriter->writeAttribute('w:type', 'dxa');
+							$objWriter->endElement();
+						}
+
+						if($mLeft) {
+							$objWriter->startElement('w:left');
+								$objWriter->writeAttribute('w:w', $margins[1]);
+								$objWriter->writeAttribute('w:type', 'dxa');
+							$objWriter->endElement();
+						}
+
+						if($mRight) {
+							$objWriter->startElement('w:right');
+								$objWriter->writeAttribute('w:w', $margins[2]);
+								$objWriter->writeAttribute('w:type', 'dxa');
+							$objWriter->endElement();
+						}
+
+						if($mBottom) {
+							$objWriter->startElement('w:bottom');
+								$objWriter->writeAttribute('w:w', $margins[3]);
+								$objWriter->writeAttribute('w:type', 'dxa');
+							$objWriter->endElement();
+						}
+
+					$objWriter->endElement();
+				}
+
+				if($tableWidth) {
+					$objWriter->startElement('w:tblW');
+						if($tableWidth === 'auto') {
+							$objWriter->writeAttribute('w:w', 0);
+							$objWriter->writeAttribute('w:type', 'auto');
+						} elseif(substr($tableWidth, -1) === '%') {
+							$objWriter->writeAttribute('w:w', $tableWidth);
+							$objWriter->writeAttribute('w:type', 'pct');
+						} else {
+							$objWriter->writeAttribute('w:w', $tableWidth);
 							$objWriter->writeAttribute('w:type', 'dxa');
-						$objWriter->endElement();
-					}
+						}
+					$objWriter->endElement();
+				}
 
-					if($mLeft) {
-						$objWriter->startElement('w:left');
-							$objWriter->writeAttribute('w:w', $margins[1]);
-							$objWriter->writeAttribute('w:type', 'dxa');
-						$objWriter->endElement();
-					}
-
-					if($mRight) {
-						$objWriter->startElement('w:right');
-							$objWriter->writeAttribute('w:w', $margins[2]);
-							$objWriter->writeAttribute('w:type', 'dxa');
-						$objWriter->endElement();
-					}
-
-					if($mBottom) {
-						$objWriter->startElement('w:bottom');
-							$objWriter->writeAttribute('w:w', $margins[3]);
-							$objWriter->writeAttribute('w:type', 'dxa');
-						$objWriter->endElement();
-					}
-
-				$objWriter->endElement();
 			$objWriter->endElement();
 		}
 	}
