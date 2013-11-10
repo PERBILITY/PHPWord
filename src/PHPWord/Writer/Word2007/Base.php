@@ -33,57 +33,67 @@ class PHPWord_Writer_Word2007_Base extends PHPWord_Writer_Word2007_WriterPart {
 
 		$SfIsObject = ($styleFont instanceof PHPWord_Style_Font) ? true : false;
 
-        $strText = htmlspecialchars($text->getText());
-        // create array of newlines
-        $multiLineStrTexts = explode("\n", $strText);
+		$afterPageBreak = $text->getAfterPageBreak();
+		$strText = htmlspecialchars($text->getText());
+		// create array of newlines
+		$multiLineStrTexts = explode("\n", $strText);
 
-        // cycle through the array and create new paragraph per new line
-        foreach ($multiLineStrTexts as $multiLineStrText) {
+		// cycle through the array and create new paragraph per new line
+		foreach ($multiLineStrTexts as $multiLineStrText) {
 
-            if(!$withoutP) {
-                $objWriter->startElement('w:p');
-
-                $styleParagraph = $text->getParagraphStyle();
-                $SpIsObject = ($styleParagraph instanceof PHPWord_Style_Paragraph) ? true : false;
-
-                if($SpIsObject) {
-                    $this->_writeParagraphStyle($objWriter, $styleParagraph);
-                } elseif(!$SpIsObject && !is_null($styleParagraph)) {
-                    $objWriter->startElement('w:pPr');
-                        $objWriter->startElement('w:pStyle');
-                            $objWriter->writeAttribute('w:val', $styleParagraph);
-                        $objWriter->endElement();
-                    $objWriter->endElement();
-                }
-            }
-
-            $strText = $multiLineStrText;
-            // this is where new line characters are striped.
-            $strText = PHPWord_Shared_String::ControlCharacterPHP2OOXML($strText);
-
-            $objWriter->startElement('w:r');
-
-                if($SfIsObject) {
-                    $this->_writeTextStyle($objWriter, $styleFont);
-                } elseif(!$SfIsObject && !is_null($styleFont)) {
-                    $objWriter->startElement('w:rPr');
-                        $objWriter->startElement('w:rStyle');
-                            $objWriter->writeAttribute('w:val', $styleFont);
-                        $objWriter->endElement();
-                    $objWriter->endElement();
-                }
-
-                $objWriter->startElement('w:t');
-                    $objWriter->writeAttribute('xml:space', 'preserve'); // needed because of drawing spaces before and after text
-                    $objWriter->writeRaw($strText);
-                $objWriter->endElement();
-
-            $objWriter->endElement(); // w:r
-
-            if(!$withoutP) {
-                $objWriter->endElement(); // w:p
-            }
-        }
+			if(!$withoutP) {
+				$objWriter->startElement('w:p');
+	
+				$styleParagraph = $text->getParagraphStyle();
+				$SpIsObject = ($styleParagraph instanceof PHPWord_Style_Paragraph) ? true : false;
+	
+				if($SpIsObject && $SfIsObject) {
+					$this->_writeParagraphStyle($objWriter, $styleParagraph, false, $styleFont);
+				} elseif($SpIsObject) {
+					$this->_writeParagraphStyle($objWriter, $styleParagraph);
+				} elseif(!$SpIsObject && !is_null($styleParagraph)) {
+					$objWriter->startElement('w:pPr');
+						$objWriter->startElement('w:pStyle');
+							$objWriter->writeAttribute('w:val', $styleParagraph);
+						$objWriter->endElement();
+					$objWriter->endElement();
+				}
+			}
+	
+			$strText = $multiLineStrText;
+			// this is where new line characters are striped.
+			$strText = PHPWord_Shared_String::ControlCharacterPHP2OOXML($strText);
+	
+			$objWriter->startElement('w:r');
+	
+				if($SfIsObject) {
+					$this->_writeTextStyle($objWriter, $styleFont);
+				} elseif(!$SfIsObject && !is_null($styleFont)) {
+					$objWriter->startElement('w:rPr');
+						$objWriter->startElement('w:rStyle');
+							$objWriter->writeAttribute('w:val', $styleFont);
+						$objWriter->endElement();
+					$objWriter->endElement();
+				}
+				
+				if($afterPageBreak) {
+					$objWriter->startElement('w:br');
+						$objWriter->writeAttribute('w:type', 'page');
+					$objWriter->endElement();
+					$afterPageBreak = false; // just one pagebreak
+				}
+	
+				$objWriter->startElement('w:t');
+					$objWriter->writeAttribute('xml:space', 'preserve'); // needed because of drawing spaces before and after text
+					$objWriter->writeRaw($strText);
+				$objWriter->endElement();
+	
+			$objWriter->endElement(); // w:r
+	
+			if(!$withoutP) {
+				$objWriter->endElement(); // w:p
+			}
+		}
 	}
 
 	protected function _writeTextRun(PHPWord_Shared_XMLWriter $objWriter = null, PHPWord_Section_TextRun $textrun) {
@@ -119,7 +129,7 @@ class PHPWord_Writer_Word2007_Base extends PHPWord_Writer_Word2007_WriterPart {
 		$objWriter->endElement();
 	}
 
-	protected function _writeParagraphStyle(PHPWord_Shared_XMLWriter $objWriter = null, PHPWord_Style_Paragraph $style, $withoutPPR = false) {
+	protected function _writeParagraphStyle(PHPWord_Shared_XMLWriter $objWriter = null, PHPWord_Style_Paragraph $style, $withoutPPR = false, PHPWord_Style_Font $styleFont = null) {
 		$align = $style->getAlign();
 		$spaceBefore = $style->getSpaceBefore();
 		$spaceAfter = $style->getSpaceAfter();
@@ -185,6 +195,10 @@ class PHPWord_Writer_Word2007_Base extends PHPWord_Writer_Word2007_WriterPart {
 
 				if(!is_null($tabs)) {
 					$tabs->toXml($objWriter);
+				}
+				
+				if(!is_null($styleFont)) {
+					$this->_writeTextStyle($objWriter, $styleFont);
 				}
 
 				if(!$withoutPPR) {
