@@ -43,6 +43,13 @@ class PHPWord_Section_Text {
 	private $_text;
 	
 	/**
+	 * decides, if a pagebreak should be rendered as start of this text
+	 * 
+	 * @var boolean
+	 */
+	private $_afterPageBreak;
+	
+	/**
 	 * Text style
 	 * 
 	 * @var PHPWord_Style_Font
@@ -63,7 +70,7 @@ class PHPWord_Section_Text {
 	 * @var string $text
 	 * @var mixed $style
 	 */
-	public function __construct($text = null, $styleFont = null, $styleParagraph = null) {
+	public function __construct($text = null, $styleFont = null, $styleParagraph = null, $afterPageBreak = false) {
 		// Set font style
 		$this->setFontStyle($styleFont);
 		
@@ -71,6 +78,7 @@ class PHPWord_Section_Text {
 		$this->setParagraphStyle($styleParagraph);
 		
 		$this->_text = $text;
+		$this->_afterPageBreak = $afterPageBreak;
 		
 		return $this;
 	}
@@ -111,6 +119,15 @@ class PHPWord_Section_Text {
 	 */
 	public function getParagraphStyle() {
 		return $this->_styleParagraph;
+	}
+	
+	/**
+	 * true, if a page break should be rendered before the text
+	 * 
+	 * @return boolean
+	 */
+	public function getAfterPageBreak() {
+	    return $this->_afterPageBreak;
 	}
 	
 	/**

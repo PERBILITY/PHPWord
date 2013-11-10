@@ -107,9 +107,9 @@ class PHPWord_Section {
 	 * @param mixed $styleParagraph
 	 * @return PHPWord_Section_Text
 	 */
-	public function addText($text, $styleFont = null, $styleParagraph = null) {
+	public function addText($text, $styleFont = null, $styleParagraph = null, $afterPageBreak = false) {
 		$givenText = $text;
-		$text = new PHPWord_Section_Text($givenText, $styleFont, $styleParagraph);
+		$text = new PHPWord_Section_Text($givenText, $styleFont, $styleParagraph, $afterPageBreak);
 		$this->_elementCollection[] = $text;
 		return $text;
 	}

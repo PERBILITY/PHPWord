@@ -64,6 +64,12 @@ class PHPWord_Writer_Word2007_Base extends PHPWord_Writer_Word2007_WriterPart {
 					$objWriter->endElement();
 				$objWriter->endElement();
 			}
+			
+			if($text->getAfterPageBreak()) {
+				$objWriter->startElement('w:br');
+					$objWriter->writeAttribute('w:type', 'page');
+				$objWriter->endElement();
+			}
 
 			$objWriter->startElement('w:t');
 				$objWriter->writeAttribute('xml:space', 'preserve'); // needed because of drawing spaces before and after text
