@@ -39,7 +39,9 @@ class PHPWord_Writer_Word2007_Base extends PHPWord_Writer_Word2007_WriterPart {
 			$styleParagraph = $text->getParagraphStyle();
 			$SpIsObject = ($styleParagraph instanceof PHPWord_Style_Paragraph) ? true : false;
 
-			if($SpIsObject) {
+			if($SpIsObject && $SfIsObject) {
+				$this->_writeParagraphStyle($objWriter, $styleParagraph, false, $styleFont);
+			} elseif($SpIsObject) {
 				$this->_writeParagraphStyle($objWriter, $styleParagraph);
 			} elseif(!$SpIsObject && !is_null($styleParagraph)) {
 				$objWriter->startElement('w:pPr');
@@ -116,7 +118,7 @@ class PHPWord_Writer_Word2007_Base extends PHPWord_Writer_Word2007_WriterPart {
 		$objWriter->endElement();
 	}
 
-	protected function _writeParagraphStyle(PHPWord_Shared_XMLWriter $objWriter = null, PHPWord_Style_Paragraph $style, $withoutPPR = false) {
+	protected function _writeParagraphStyle(PHPWord_Shared_XMLWriter $objWriter = null, PHPWord_Style_Paragraph $style, $withoutPPR = false, PHPWord_Style_Font $styleFont = null) {
 		$align = $style->getAlign();
 		$spaceBefore = $style->getSpaceBefore();
 		$spaceAfter = $style->getSpaceAfter();
@@ -182,6 +184,10 @@ class PHPWord_Writer_Word2007_Base extends PHPWord_Writer_Word2007_WriterPart {
 
 				if(!is_null($tabs)) {
 					$tabs->toXml($objWriter);
+				}
+				
+				if(!is_null($styleFont)) {
+					$this->_writeTextStyle($objWriter, $styleFont);
 				}
 
 				if(!$withoutPPR) {
