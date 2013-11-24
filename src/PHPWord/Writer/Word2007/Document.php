@@ -72,6 +72,8 @@ class PHPWord_Writer_Word2007_Document extends PHPWord_Writer_Word2007_Base {
 						$this->_writeTextRun($objWriter, $element);
 					} elseif($element instanceof PHPWord_Section_Link) {
 						$this->_writeLink($objWriter, $element);
+					} elseif($element instanceof PHPWord_Section_XHtml) {
+						$this->_writeXHtml($objWriter, $element);
 					} elseif($element instanceof PHPWord_Section_Title) {
 						$this->_writeTitle($objWriter, $element);
 					} elseif($element instanceof PHPWord_Section_TextBreak) {
@@ -90,7 +92,7 @@ class PHPWord_Writer_Word2007_Document extends PHPWord_Writer_Word2007_Base {
 					} elseif($element instanceof PHPWord_TOC) {
 						$this->_writeTOC($objWriter);
 					} elseif($element instanceof PHPWord_Section_Footnote) {
-                      $this->_writeFootnoteReference($objWriter, $element);
+						$this->_writeFootnoteReference($objWriter, $element);
 					}
 				}
 				
@@ -237,23 +239,23 @@ class PHPWord_Writer_Word2007_Document extends PHPWord_Writer_Word2007_Base {
 	protected function _writeListItem(PHPWord_Shared_XMLWriter $objWriter = null, PHPWord_Section_ListItem $listItem) {
 		$textObject = $listItem->getTextObject();
 		$text = $textObject->getText();
-        $styleParagraph = $textObject->getParagraphStyle();
-        $SpIsObject = ($styleParagraph instanceof PHPWord_Style_Paragraph) ? true : false;
-        
+		$styleParagraph = $textObject->getParagraphStyle();
+		$SpIsObject = ($styleParagraph instanceof PHPWord_Style_Paragraph) ? true : false;
+		
 		$depth = $listItem->getDepth();
 		$listType = $listItem->getStyle()->getListType();
 		
 		$objWriter->startElement('w:p');
 			$objWriter->startElement('w:pPr');
-            
-                if($SpIsObject) {
-                    $this->_writeParagraphStyle($objWriter, $styleParagraph, true);
-                } elseif(!$SpIsObject && !is_null($styleParagraph)) {
-                    $objWriter->startElement('w:pStyle');
-                        $objWriter->writeAttribute('w:val', $styleParagraph);
-                    $objWriter->endElement();
-                }
-            
+			
+				if($SpIsObject) {
+					$this->_writeParagraphStyle($objWriter, $styleParagraph, true);
+				} elseif(!$SpIsObject && !is_null($styleParagraph)) {
+					$objWriter->startElement('w:pStyle');
+						$objWriter->writeAttribute('w:val', $styleParagraph);
+					$objWriter->endElement();
+				}
+			
 				$objWriter->startElement('w:numPr');
 				
 					$objWriter->startElement('w:ilvl');
@@ -349,9 +351,9 @@ class PHPWord_Writer_Word2007_Document extends PHPWord_Writer_Word2007_Base {
 			
 				$objWriter->startElement('w:pPr');
 					
-                    if($isObject && !is_null($styleFont->getParagraphStyle())) {
-                        $this->_writeParagraphStyle($objWriter, $styleFont->getParagraphStyle());
-                    }
+					if($isObject && !is_null($styleFont->getParagraphStyle())) {
+						$this->_writeParagraphStyle($objWriter, $styleFont->getParagraphStyle());
+					}
 					
 					if($indent > 0) {
 						$objWriter->startElement('w:ind');

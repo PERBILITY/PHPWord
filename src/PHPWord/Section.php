@@ -138,6 +138,21 @@ class PHPWord_Section {
 	}
 	
 	/**
+	 * Add a xhtml content
+	 * 
+	 * @param string $content
+	 * @return PHPWord_Section_XHtml
+	 */
+	public function addXHtml($content) {
+		$xhtml = new PHPWord_Section_XHtml($content);
+		$rID = PHPWord_Media::addSectionXHtmlElement($content);
+		$xhtml->setRelationId($rID);
+		
+		$this->_elementCollection[] = $xhtml;
+		return $xhtml;
+	}
+	
+	/**
 	 * Add a TextBreak Element
 	 * 
 	 * @param int $count

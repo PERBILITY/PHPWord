@@ -42,7 +42,8 @@ class PHPWord_Media {
 	 */
 	private static $_sectionMedia = array('images'=>array(),
 										  'embeddings'=>array(),
-										  'links'=>array());
+										  'links'=>array(),
+										  'chunks'=>array());
 	
 	/**
 	 * Header Media Elements
@@ -154,6 +155,28 @@ class PHPWord_Media {
 	}
 	
 	/**
+	 * Add new Section Link Element
+	 * 
+	 * @param string $linkSrc
+	 * @param string $linkName
+	 * 
+	 * @return mixed
+	 */
+	public static function addSectionXHtmlElement($content) {
+		$rID = self::countSectionMediaElements() + 7;
+		
+		$chunk = array();
+		$chunk['content'] = $content;
+		$chunk['rID'] = $rID;
+		$chunk['type'] = 'aFChunk';
+		$chunk['target'] = 'chunks/chunk_' . $rID . '.xhtml';
+		
+		self::$_sectionMedia['chunks'][] = $chunk;
+		
+		return $rID;
+	}
+	
+	/**
 	 * Get Section Media Elements
 	 * 
 	 * @param string $key
@@ -166,7 +189,8 @@ class PHPWord_Media {
 			$arrImages = self::$_sectionMedia['images'];
 			$arrObjects = self::$_sectionMedia['embeddings'];
 			$arrLinks = self::$_sectionMedia['links'];
-			return array_merge($arrImages, $arrObjects, $arrLinks);
+			$arrChunks  = self::$_sectionMedia['chunks'];
+			return array_merge($arrImages, $arrObjects, $arrLinks, $arrChunks);
 		}
 	}
 	
@@ -183,7 +207,8 @@ class PHPWord_Media {
 			$cImages = count(self::$_sectionMedia['images']);
 			$cObjects = count(self::$_sectionMedia['embeddings']);
 			$cLinks = count(self::$_sectionMedia['links']);
-			return ($cImages + $cObjects + $cLinks);
+			$cChunks = count(self::$_sectionMedia['chunks']);
+			return ($cImages + $cObjects + $cLinks + $cChunks);
 		}
 	}
 	

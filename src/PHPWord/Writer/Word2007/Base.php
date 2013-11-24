@@ -263,6 +263,19 @@ class PHPWord_Writer_Word2007_Base extends PHPWord_Writer_Word2007_WriterPart {
 		}
 	}
 
+	protected function _writeXHtml(PHPWord_Shared_XMLWriter $objWriter = null, PHPWord_Section_XHtml $xhtml) {
+		$rID = $xhtml->getRelationId();
+
+		$objWriter->startElement('w:p');
+			$objWriter->startElement('w:r');
+			$objWriter->endElement();
+
+			$objWriter->startElement('w:altChunk');
+				$objWriter->writeAttribute('r:id', 'rId'.$rID);
+			$objWriter->endElement();
+		$objWriter->endElement(); // w:p
+	}
+
 	protected function _writePreserveText(PHPWord_Shared_XMLWriter $objWriter = null, PHPWord_Section_Footer_PreserveText $textrun) {
 		$styleFont = $textrun->getFontStyle();
 		$styleParagraph = $textrun->getParagraphStyle();
@@ -537,6 +550,8 @@ class PHPWord_Writer_Word2007_Base extends PHPWord_Writer_Word2007_WriterPart {
 											$this->_writeTextRun($objWriter, $element);
 										} elseif($element instanceof PHPWord_Section_Link) {
 											$this->_writeLink($objWriter, $element);
+										} elseif($element instanceof PHPWord_Section_XHtml) {
+											$this->_writeXHtml($objWriter, $element);
 										} elseif($element instanceof PHPWord_Section_TextBreak) {
 											$this->_writeTextBreak($objWriter);
 										} elseif($element instanceof PHPWord_Section_ListItem) {

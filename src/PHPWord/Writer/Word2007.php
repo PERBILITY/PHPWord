@@ -248,6 +248,8 @@ class PHPWord_Writer_Word2007 implements PHPWord_Writer_IWriter {
 			imagedestroy($image);
 			
 			$this->_chkContentTypes($element['source']);
+		} elseif (isset($element['content'])) {
+			$objZip->addFromString('word/'.$element['target'], $element['content']);
 		} else {
 			$objZip->addFile($element['source'], 'word/'.$element['target']);
 			$this->_chkContentTypes($element['source']);

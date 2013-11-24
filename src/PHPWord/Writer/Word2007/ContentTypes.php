@@ -54,6 +54,11 @@ class PHPWord_Writer_Word2007_ContentTypes extends PHPWord_Writer_Word2007_Write
 				$objWriter, 'xml', 'application/xml'
 			);
 			
+			// XHTML
+			$this->_writeDefaultContentType(
+				$objWriter, 'xhtml', 'application/xhtml+xml'
+			);
+			
 			// Add media content-types
 			foreach($_imageTypes as $key => $value) {
 				$this->_writeDefaultContentType($objWriter, $key, $value);
