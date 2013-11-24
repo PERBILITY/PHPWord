@@ -318,6 +318,7 @@ class PHPWord_Writer_Word2007_Styles extends PHPWord_Writer_Word2007_Base {
 	private function _writeDocDefaults(PHPWord_Shared_XMLWriter $objWriter = null) {
 		$fontName = $this->_document->getDefaultFontName();
 		$fontSize = $this->_document->getDefaultFontSize();
+		$paragraphStyle = $this->_document->getDefaultParagraphStyle();
 		
 		$objWriter->startElement('w:docDefaults');
 			$objWriter->startElement('w:rPrDefault');
@@ -340,6 +341,12 @@ class PHPWord_Writer_Word2007_Styles extends PHPWord_Writer_Word2007_Base {
 					
 				$objWriter->endElement();
 			$objWriter->endElement();
+			
+			if ($paragraphStyle !== null) {
+			$objWriter->startElement('w:pPrDefault');
+				$this->_writeParagraphStyle($objWriter, $paragraphStyle);
+			$objWriter->endElement();
+			}
 		$objWriter->endElement();
 	}
 }

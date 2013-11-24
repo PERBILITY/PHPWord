@@ -64,6 +64,13 @@ class PHPWord {
 	private $_defaultFontSize;
 	
 	/**
+	 * Default paragraph style
+	 *
+	 * @var PHPWord_Style_Paragraph
+	 */
+	private $_defaultParagraphStyle;
+	
+	/**
 	 * Collection of section elements
 	 *
 	 * @var array
@@ -144,6 +151,31 @@ class PHPWord {
 	public function setDefaultFontSize($pValue) {
 		$pValue = $pValue * 2;
 		$this->_defaultFontSize = $pValue;
+	}
+	
+	/**
+	 * Get default paragraph style
+	 * @return PHPWord_Style_Paragraph
+	 */
+	public function getDefaultParagraphStyle() {
+		return $this->_defaultParagraphStyle;
+	}
+	
+	/**
+	 * Sets the document wide default paragraph style
+	 * 
+	 * @param $styles array
+	 */
+	public function setDefaultParagraphStyle($styles) {
+		$style = new PHPWord_Style_Paragraph();
+		foreach($styles as $key => $value) {
+			if(substr($key, 0, 1) != '_') {
+				$key = '_'.$key;
+			}
+			$style->setStyleValue($key, $value);
+		}
+		
+		$this->_defaultParagraphStyle = $style;
 	}
 	
 	/**
