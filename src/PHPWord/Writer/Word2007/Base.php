@@ -267,6 +267,22 @@ class PHPWord_Writer_Word2007_Base extends PHPWord_Writer_Word2007_WriterPart {
 		$rID = $xhtml->getRelationId();
 
 		$objWriter->startElement('w:p');
+			// hardcoded format for "after-html line"
+			$objWriter->startElement('w:pPr');
+				$objWriter->startElement('w:spacing');
+					$objWriter->writeAttribute('w:before', '0');
+					$objWriter->writeAttribute('w:after', '0');
+				$objWriter->endElement(); // w:spacing
+				$objWriter->startElement('w:rPr');
+					$objWriter->startElement('w:sz');
+						$objWriter->writeAttribute('w:val', '1');
+					$objWriter->endElement(); // w:sz
+					$objWriter->startElement('w:szCs');
+						$objWriter->writeAttribute('w:val', '1');
+					$objWriter->endElement(); // w:szCs
+				$objWriter->endElement(); // w:rPr
+			$objWriter->endElement(); // w:pPr
+		
 			$objWriter->startElement('w:r');
 			$objWriter->endElement();
 
