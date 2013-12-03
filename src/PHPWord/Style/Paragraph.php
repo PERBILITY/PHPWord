@@ -92,7 +92,11 @@ class PHPWord_Style_Paragraph {
 	 * @var array
 	 */
 	private $_tabs;
-
+	
+	private $_keepNext;
+	
+	private $_keepLines;
+	
 	/**
 	 * New Paragraph Style
 	 */
@@ -105,6 +109,8 @@ class PHPWord_Style_Paragraph {
 		$this->_leftMargin      = null;
 		$this->_rightMargin     = null;
 		$this->_tabs            = null;
+		$this->_keepNext        = null;
+		$this->_keepLines       = null;
 	}
 
 	/**
@@ -275,6 +281,14 @@ class PHPWord_Style_Paragraph {
 	 */
 	public function getTabs() {
 		return $this->_tabs;
+	}
+
+	public function getKeepNext() {
+		return $this->_keepNext;
+	}
+
+	public function getKeepLines() {
+		return $this->_keepLines;
 	}
 }
 ?>

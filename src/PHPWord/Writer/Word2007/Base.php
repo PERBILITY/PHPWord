@@ -148,6 +148,16 @@ class PHPWord_Writer_Word2007_Base extends PHPWord_Writer_Word2007_WriterPart {
 				if(!$withoutPPR) {
 					$objWriter->startElement('w:pPr');
 				}
+				
+				if ($style->getKeepNext()) {
+				    $objWriter->startElement('w:keepNext');
+				    $objWriter->endElement();				    
+				}
+
+				if ($style->getKeepLines()) {
+				    $objWriter->startElement('w:keepLines');
+				    $objWriter->endElement();				    
+				}
 
 				// 2013 04 11
 				if( !is_null($leftMargin) || !is_null($rightMargin) ) {
