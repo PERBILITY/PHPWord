@@ -774,7 +774,12 @@ class PHPWord_Writer_Word2007_Base extends PHPWord_Writer_Word2007_WriterPart {
 
 			if(!is_null($align)) {
 				$objWriter->startElement('w:pPr');
-					$objWriter->startElement('w:jc');
+				// hardcoded spacing of image-paragraph 
+    			$objWriter->startElement('w:spacing');
+					$objWriter->writeAttribute('w:before', '0');
+					$objWriter->writeAttribute('w:after', '0');
+				$objWriter->endElement(); // w:spacing
+				$objWriter->startElement('w:jc');
 						$objWriter->writeAttribute('w:val', $align);
 					$objWriter->endElement();
 				$objWriter->endElement();
