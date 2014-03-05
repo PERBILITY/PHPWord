@@ -298,6 +298,18 @@ class PHPWord_Section_Table_Cell {
 	}
 	
 	/**
+	 * Add a nested Table to a Cell
+	 * 
+	 * @param string $style
+	 * @return PHPWord_Section_Table
+	 */
+	public function addTable($style = null) {
+	    $table = new PHPWord_Section_Table('table', $this->_pCount, $style);
+	    $this->_elementCollection[] = $table;
+	    return $table;
+	}
+	
+	/**
 	 * Get all Elements
 	 * 
 	 * @return array
