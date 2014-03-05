@@ -304,9 +304,9 @@ class PHPWord_Section_Table_Cell {
 	 * @return PHPWord_Section_Table
 	 */
 	public function addTable($style = null) {
-	    $table = new PHPWord_Section_Table('table', $this->_pCount, $style);
-	    $this->_elementCollection[] = $table;
-	    return $table;
+		$table = new PHPWord_Section_Table('table', $this->_pCount, $style);
+		$this->_elementCollection[] = $table;
+		return $table;
 	}
 	
 	/**
