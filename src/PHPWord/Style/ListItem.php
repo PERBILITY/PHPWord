@@ -41,7 +41,7 @@ class PHPWord_Style_ListItem {
 	const TYPE_BULLET_FILLED    = 3;
 	const TYPE_BULLET_EMPTY     = 5;
 	const TYPE_SQUARE_FILLED    = 1;
-    const TYPE_SHORT_TABBED_GREY_DASH    = 10;
+  const TYPE_SHORT_TABBED_GREY_DASH    = 10;
 	
 	/**
 	 * List Type
